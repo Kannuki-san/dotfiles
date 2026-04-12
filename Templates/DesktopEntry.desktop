@@ -1,0 +1,9 @@
+[Desktop Entry]
+Type=Application
+Name=アプリ名
+#Path= #実行場所削除可能
+Exec=起動コマンド+引数
+Icon=アイコンパス
+Comment=コメント #コメント 削除可能
+Terminal=false
+Categories=Utility;カテゴリ;
