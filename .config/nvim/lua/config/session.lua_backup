@@ -1,0 +1,57 @@
+local session_file = vim.fn.stdpath("data") .. "/session.vim"
+
+vim.o.sessionoptions = "buffers,curdir,tabpages,winsize"
+
+vim.api.nvim_create_autocmd("FileType", {
+  pattern = "neo-tree",
+  callback = function()
+    vim.bo.buflisted = false
+  end,
+})
+
+local function smart_quit()
+  local wins = vim.api.nvim_list_wins()
+  local normal_wins = 0
+
+  for _, win in ipairs(wins) do
+    local buf = vim.api.nvim_win_get_buf(win)
+    local ft = vim.bo[buf].filetype
+
+    if ft ~= "neo-tree" then
+      normal_wins = normal_wins + 1
+    end
+  end
+
+  if normal_wins <= 1 then
+    vim.cmd("qa")
+  else
+    vim.cmd("q")
+  end
+end
+
+-- :Q で賢く閉じる
+vim.api.nvim_create_user_command("Q", function()
+  smart_quit()
+end, {})
+
+-- :WQ で保存してから賢く閉じる
+vim.api.nvim_create_user_command("WQ", function()
+  vim.cmd("w")
+  smart_quit()
+end, {})
+
+vim.api.nvim_create_autocmd("VimEnter", {
+  callback = function()
+    if vim.fn.argc() == 0 and vim.fn.filereadable(session_file) == 1 then
+      vim.cmd("silent! Neotree close")
+      vim.cmd("silent! source " .. vim.fn.fnameescape(session_file))
+    end
+  end,
+})
+
+vim.api.nvim_create_autocmd("VimLeavePre", {
+  callback = function()
+    vim.cmd("silent! Neotree close")
+    vim.cmd("silent! mksession! " .. vim.fn.fnameescape(session_file))
+  end,
+})

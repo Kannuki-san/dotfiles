@@ -1,0 +1,29 @@
+return {
+  {
+    "nvim-neo-tree/neo-tree.nvim",
+    dependencies = {
+      "nvim-lua/plenary.nvim",
+      "MunifTanjim/nui.nvim",
+      "nvim-tree/nvim-web-devicons",
+    },
+    cmd = "Neotree",
+    keys = {
+      { "<leader>e", "<cmd>Neotree filesystem toggle left<CR>", desc = "Explorer" },
+      { "<leader>o", "<cmd>Neotree filesystem reveal left<CR>", desc = "Reveal current file" },
+    },
+    opts = {
+      filesystem = {
+	filterd_items = {
+	 visible = true,
+	 hide_dotfiles = false,
+	 hide_gitignored = false,
+	},
+        follow_current_file = {
+          enabled = true,
+        },
+
+        hijack_netrw_behavior = "open_default",
+      },
+    },
+  },
+}

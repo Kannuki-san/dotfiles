@@ -1,0 +1,221 @@
+{
+    "position": "top",
+    "layer": "top",
+    "height": 16,
+    "margin-top": 0,
+    "margin-bottom": 0,
+    "margin-left": 0,
+    "margin-right": 0,
+    "modules-left": ["custom/launcher", "custom/playerctl", "custom/playerlabel","hyprland/workspaces"],
+    "modules-center": ["custom/logout", "cpu", "memory", "disk", "custom/screenshot", "custom/hyprpicker"],
+    "modules-right": ["tray", "power-profiles-daemon", "battery", "network", "wireplumber", "clock", "custom/notification"],
+    // Modules configuration
+	"clock": {
+		"format": " {:%H:%M}",
+		"tooltip": "true",
+        	"tooltip-format": "<big>{:%Y %B}</big>\n<tt><small>{calendar}</small></tt>",
+        	"format-alt": " {:%m/%d}"
+	},
+	
+  "power-profiles-daemon": {
+      "format": "{icon}",
+      "tooltip-format": "Power profile: {profile}\nDriver: {driver}",
+      "tooltip": true,
+      "format-icons": {
+        "default": "",
+        "performance": "",
+        "balanced": "",
+        "power-saver": ""
+      },
+  },
+
+	"hyprland/workspaces": {
+  		"active-only": false,
+  		"all-outputs": true,
+  		"persistent-only": true,
+  		"disable-scroll": false,
+  		"sort-by": "number",
+  		"on-scroll-up": "hyprctl dispatch workspace -1",
+  		"on-scroll-down": "hyprctl dispatch workspace +1",
+  		"on-click": "activate",
+  		"format": "{icon}",
+  		"format-icons": {
+    		"1": "□",
+    		"2": "□",
+    		"3": "□",
+    		"4": "□",
+    		"active": "",
+    		"default": "󰧞",
+    		"empty": "󰧞"
+  		},
+  		"persistent-workspaces": {
+    			"*": [1, 2, 3, 4]
+  		}
+	},
+
+	"custom/playerctl": {
+  "format": "{}",
+  "return-type": "json",
+  "interval": 1,
+  "exec": "sh -c 'status=$(playerctl status 2>/dev/null || echo Stopped); if [ \"$status\" = \"Playing\" ]; then echo \"{\\\"text\\\":\\\"󰒮 󰏤 󰒭\\\",\\\"class\\\":\\\"playing\\\"}\"; elif [ \"$status\" = \"Paused\" ]; then echo \"{\\\"text\\\":\\\"󰒮 󰐊 󰒭\\\",\\\"class\\\":\\\"paused\\\"}\"; else echo \"{\\\"text\\\":\\\"󰒮 󰐊 󰒭\\\",\\\"class\\\":\\\"stopped\\\"}\"; fi'",
+  "on-click": "playerctl play-pause",
+  "on-click-middle": "playerctl previous",
+  "on-click-right": "playerctl next"
+},
+
+
+//	"custom/playerctl": {
+//  		"format": "{}",
+//  		"return-type": "json",
+//  		"interval": 1,
+//  		"exec": "sh -c 'status=$(playerctl status 2>/dev/null || echo Stopped); case \"$status\" in Playing) echo \"{\\\"text\\\":\\\"<span foreground=\\\"#E5B9C6\\\">󰒮 󰐌 󰒭</span>\\\",\\\"class\\\":\\\"playing\\\"}\" ;; Paused) echo \"{\\\"text\\\":\\\"<span foreground=\\\"#928374\\\">󰒮 󰏥 󰒭</span>\\\",\\\"class\\\":\\\"paused\\\"}\" ;; *) echo \"{\\\"text\\\":\\\"<span foreground=\\\"#749291\\\">󰓛</span>\\\",\\\"class\\\":\\\"stopped\\\"}\" ;; esac'",
+//  		"on-click-middle": "playerctl play-pause",
+//		"on-click": "playerctl previous",
+//  		"on-click-right": "playerctl next"
+//		},
+
+
+	"custom/playerlabel": {
+  		"format": "{}",
+  		"return-type": "json",
+  		"interval": 1,
+  		"exec": "sh -c 'status=$(playerctl status 2>/dev/null || echo Stopped); if [ \"$status\" = \"Stopped\" ]; then echo \"{\\\"text\\\":\\\"No media\\\",\\\"class\\\":\\\"stopped\\\"}\"; else text=$(playerctl metadata --format \"{{artist}} - {{markup_escape(title)}}\" 2>/dev/null); [ -z \"$text\" ] && text=\"Playing\"; printf \"{\\\"text\\\":\\\"%s\\\",\\\"class\\\":\\\"%s\\\"}\" \"$text\" \"$(printf %s \"$status\" | tr A-Z a-z)\"; fi'",
+  		"max-length": 48,
+  		"on-click-middle": "playerctl play-pause",
+  		"on-click": "playerctl previous",
+  		"on-click-right": "playerctl next"
+		},
+
+	"battery": {
+        "states": {
+            "good": 95,
+            "warning": 30,
+            "critical": 15
+        },
+        "format":"{icon}  {capacity}%",
+        "format-charging": "{capacity}% 󰂄",
+        "format-plugged": "{capacity}% ",
+        "format-alt": "{icon}",
+        // "format-good": "", // An empty format will hide the module
+        // "format-full": "",
+        "format-icons": ["", "", "", "", ""]
+	},
+
+  "memory": {
+    "format": "󰍛 {}%",
+    "format-alt": "󰍛 {used}/{total} GiB",
+    "interval": 5,
+    "on-click-right": "kitty btop"
+  },
+
+  "cpu": {
+    "format": "󰻠 {usage}%",
+    "format-alt": "󰻠 {avg_frequency} GHz",
+    "interval": 5,
+    "on-click-right": "kitty btop"
+  },
+
+  "disk": {
+    "format": "󰋊 {}%",
+    "format-alt": "󰋊 {used}/{total} GiB",
+    "interval": 5,
+    "path": "/mnt/Datos"
+  },
+	
+	"network": {
+        	"format-wifi": "󰤨",
+        	"format-ethernet": "󰈀 ",
+        	"format-linked": " {ifname} (No IP)",
+        	"format-disconnected": "󰤭",
+        	"format-alt": "{ifname}: {ipaddr}/{cidr}",
+          "tooltip-format": "{essid}",
+          "on-click-right": "nm-connection-editor"
+	},
+
+	"tray": {
+		"icon-size": 12,
+		"spacing": 5
+	},
+
+	"backlight": {
+        // "device": "acpi_video1",
+	"format": "{icon} {percent}%",
+        "format-icons": ["", "", "", "", "", "", "", "", ""],
+//	"on-scroll-up":,
+//	"on-scroll-down":,
+	},
+
+	"wireplumber": {
+		"format": "{icon} {volume}%",
+        	"format-muted": "󰝟",
+		"format-icons": {
+			"default": ["󰕿", "󰖀", "󰕾"]
+		},
+		"on-click": "wpctl set-mute @DEFAULT_AUDIO_SINK@ toggle",
+    "on-scroll-up": "wpctl set-volume @DEFAULT_AUDIO_SINK@ 5%+",
+    "on-scroll-down": "wpctl set-volume @DEFAULT_AUDIO_SINK@ 5%-",
+    "scroll-step": 5,
+		"on-click-right": "pavucontrol"
+  },
+  "custom/randwall": {
+    "format": "󰏘",
+    "on-click": "bash $HOME/.config/hypr/randwall.sh",
+    "on-click-right": "bash $HOME/.config/hypr/wall.sh"
+  },
+  "custom/launcher": {
+    "format": "󰣇",
+//    "on-click": "bash $HOME/.config/rofi/launcher.sh",
+    "on-click": "rofi -show drun", // -I -a -s ~/.config/wofi/nord.css",
+//    "on-click-right": "bash $HOME/.config/rofi/run.sh"  
+    //"on-click-right": "wofrofii --show run -I -a -s ~/.config/wofi/nord.css"  
+  },
+
+  "custom/wf-recorder": {
+	"format": "{󰹑}",
+	"interval": "once",
+	"exec": "echo ''",
+	"tooltip": "true",
+	"exec-if": "pgrep 'wf-recorder'",
+	"on-click": "exec ./scripts/wlrecord.sh",
+	"signal": 8
+  },
+
+  "custom/hyprpicker": {
+    "format": "󰈋",
+    "on-click": "hyprpicker -a -f hex",
+    "on-click-right": "hyprpicker -a -f rgb"
+  },
+
+  "custom/logout": {
+    "format": "󰇙 ",
+    "on-click": "wlogout"
+  },
+
+  "custom/screenshot": {
+    "format":"󱣵",
+    "on-click": "env HYPRSHOT_DIR=$HOME/Pictures/screenshot/hyperland hyprshot -m output",
+    "on-click-right": "env HYPRSHOT_DIR=$HOME/Pictures/screenshot/hyperland hyprshot -m window"
+  },
+  
+  "custom/notification": {
+    "tooltip": false,
+    "format": "{icon}",
+    "format-icons": {
+      "notification": "<span foreground='red'><sup></sup></span>",
+      "none": "",
+      "dnd-notification": "<span foreground='red'><sup></sup></span>",
+      "dnd-none": "",
+      "inhibited-notification": "<span foreground='red'><sup></sup></span>",
+      "inhibited-none": "",
+      "dnd-inhibited-notification": "<span foreground='red'><sup></sup></span>",
+      "dnd-inhibited-none": ""
+    },
+    "return-type": "json",
+    "exec-if": "which swaync-client",
+    "exec": "swaync-client -swb",
+    "on-click": "swaync-client -t -sw",
+    "on-click-right": "swaync-client -d -sw",
+    "escape": true
+  },
+  }
+}
