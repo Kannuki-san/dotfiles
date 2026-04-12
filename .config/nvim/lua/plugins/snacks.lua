@@ -208,7 +208,7 @@ return {
     keys = {
       -- Explorer
       {
-        "<leader>E",
+        "<leader>e",
         function()
           Snacks.explorer()
         end,
@@ -217,7 +217,7 @@ return {
       },
 
       {
-        "<leader>e",
+        "<leader>E",
         function()
           local file = vim.fn.expand("%:p")
           if file == "" then
@@ -226,6 +226,10 @@ return {
           end
 
           local dir = vim.fn.fnamemodify(file, ":h")
+          if dir ~= "" and vim.fn.isdirectory(dir) == 1 then
+            vim.fn.chdir(dir, "tabpage")
+          end
+
           Snacks.explorer({
             cwd = dir,
           })
@@ -375,6 +379,10 @@ return {
         end
 
         explorer_root = dir
+
+        -- Neovim 自体のルートディレクトリもこの場所に合わせる
+        -- タブ単位で cwd を変更
+        vim.cmd("tcd " .. vim.fn.fnameescape(explorer_root))
 
         -- explorer を開く直前にも再適用して、
         -- 黒背景になる確率を下げる
