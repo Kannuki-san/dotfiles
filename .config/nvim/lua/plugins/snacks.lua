@@ -227,7 +227,7 @@ return {
 
           local dir = vim.fn.fnamemodify(file, ":h")
           if dir ~= "" and vim.fn.isdirectory(dir) == 1 then
-            vim.fn.chdir(dir, "tabpage")
+            vim.cmd("tcd " .. vim.fn.fnameescape(dir))
           end
 
           Snacks.explorer({
