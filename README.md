@@ -1,0 +1,1 @@
+# Kannuki_sanのHyprlandの構成の簡単なセッティングファイル
